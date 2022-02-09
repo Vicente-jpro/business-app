@@ -6,5 +6,6 @@ class User < ApplicationRecord
   has_many :accounts
   has_many :account_histories
 
-  validates :username, presence :true
+  validates :username, presence: true
+  
 end

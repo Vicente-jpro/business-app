@@ -24,11 +24,7 @@ class AccountsController < ApplicationController
     
     @account = Account.new(account_params)
     @account.user_id = current_user.id
-
-    @last_user_account = Account.last
-    if @last_user_account.any?
-      @account.number = @last_user_account.number + 1
-    end
+    @account.number = new_accout_number
 
     respond_to do |format|
       if @account.save
@@ -72,6 +68,18 @@ class AccountsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def account_params
-      params.require(:account).permit(:number, :money, :status)
+      params.require(:account).permit(:money, :status)
     end
+
+    def new_accout_number
+      @last_user_account = Account.last
+
+    logger.debug {"Last acount attributes hash: #{@last_user_account.attributes.inspect}"}
+      if !@last_user_account.nil?
+          @last_user_account.number = @last_user_account.number + 1
+      end
+
+      return @last_user_account.number
+    end
+  
 end
