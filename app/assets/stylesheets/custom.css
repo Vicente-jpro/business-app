@@ -1,0 +1,57 @@
+
+/************* Text and Titles ****************/
+.text-white{
+	color: white !important;
+}
+
+.text-white:hover{
+	color: #880e4f !important;
+}
+
+
+
+/*/The same color nave bar /*/
+h1{
+	color: #e57373 !important
+}
+
+h2{
+	color: #e57373 !important
+
+}
+
+h3{
+	color: #e57373 !important
+
+}
+/************* end ******************************/
+
+.menu-color{
+	background-color: #e57373;
+}
+body{
+	/* #fce4ec pink lighten-5  */
+	background-color: #fce4ec;
+}
+
+
+::placeholder {
+  color: #e57373 !important;
+}
+
+label{
+	margin-right: 10px !important;
+	color: #e57373 !important
+}
+
+/************************ Form signin ******************************/
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+.form-check-label{
+	padding-right: 15px;
+}
