@@ -18,6 +18,10 @@ class AccountsController < ApplicationController
   # GET /accounts/1/edit
   def edit
   end
+   # GET /accounts/1/user
+  def user_accounts
+    @accounts = Account.where(user_id: current_user.id)
+  end
 
   # POST /accounts or /accounts.json
   def create
