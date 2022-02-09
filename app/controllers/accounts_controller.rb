@@ -21,8 +21,14 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
+    
     @account = Account.new(account_params)
     @account.user_id = current_user.id
+
+    @last_user_account = Account.last
+    if @last_user_account.any?
+      @account.number = @last_user_account.number + 1
+    end
 
     respond_to do |format|
       if @account.save
