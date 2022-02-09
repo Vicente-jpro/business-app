@@ -22,6 +22,19 @@ class AccountsController < ApplicationController
   def user_accounts
     @accounts = Account.where(user_id: current_user.id)
   end
+  
+  #GET numero da conta para efectuar o saque
+  # GET /accounts/:number/withdraw
+  def withdraw
+    @account = Account.where(params[:number]).first
+    account = @account
+    account.money = 0.0;
+    @account_withdraw = account
+
+    logger.debug {"Last acount attributes hash: #{@account_withdraw.attributes.inspect}"}
+  end
+
+
 
   # POST /accounts or /accounts.json
   def create
