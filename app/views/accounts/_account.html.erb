@@ -19,7 +19,10 @@
     <%= account.user.username %>
   </p>
   <p>
-    <%= link_to %>
+    <%= link_to "Take money", withdraw_path(account.number), class: "btn btn-info"%>
+  </p>
+    <p>
+    <%= link_to "Transfer money", withdraw_path(account.number), class: "btn btn-info"%>
   </p>
   <hr>
 
