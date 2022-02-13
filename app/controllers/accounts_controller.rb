@@ -1,6 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[ show edit update destroy ]
-
+  before_action :set_account, only: %i[ show edit update destroy account_update_params ]
   # GET /accounts or /accounts.json
   def index
     @accounts = Account.all
@@ -26,12 +25,12 @@ class AccountsController < ApplicationController
   #GET numero da conta para efectuar o saque
   # GET /accounts/:number/withdraw
   def withdraw
-    @account = Account.where(params[:number]).first
+    @account = Account.find_by_account_number(params[:number])
     account = @account
     account.money = 0.0;
     @account_withdraw = account
 
-    logger.debug {"Last acount attributes hash: #{@account_withdraw.attributes.inspect}"}
+ # logger.debug {"Last acount attributes hash: #{@account_withdraw.attributes.inspect}"}
   end
 
 
@@ -56,13 +55,20 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
-    respond_to do |format|
-      if @account.update(account_params)
-        format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
-        format.json { render :show, status: :ok, location: @account }
+      if account_update_params[:money].to_f < 0
+        redirect_to "/accounts/"+@account.number.to_s+"/withdraw" 
+        flash[:notice]="Money should be less than or equal to $"
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+      #logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
+  
+      respond_to do |format|
+        if @account.update(account_update_params)
+          format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
+          format.json { render :show, status: :ok, location: @account }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @account.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -87,6 +93,18 @@ class AccountsController < ApplicationController
     def account_params
       params.require(:account).permit(:money, :status)
     end
+
+    def account_update_params
+      my_params = params.require(:account).permit(:money, :status)
+
+      if my_params[:money].to_f < 0
+        return my_params
+      else
+       my_params[:money] = @account.money - my_params[:money].to_f
+      return my_params
+      end
+    end
+
 
     def new_accout_number
       @last_user_account = Account.last
