@@ -1,6 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[ show edit update destroy ]
-
+  before_action :set_account, only: %i[ show edit update destroy account_update_params ]
   # GET /accounts or /accounts.json
   def index
     @accounts = Account.all
@@ -62,7 +61,7 @@ class AccountsController < ApplicationController
     logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
     #account_params[:money]
     respond_to do |format|
-      if @account.update(account_params)
+      if @account.update(account_update_params)
         format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
         format.json { render :show, status: :ok, location: @account }
       else
@@ -90,8 +89,12 @@ class AccountsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def account_params
+      params.require(:account).permit(:money, :status)
+    end
+
+    def account_update_params
       my_params = params.require(:account).permit(:money, :status)
-      my_params[:money] = 4444 
+      my_params[:money] = @account.money - my_params[:money].to_f
       return my_params
     end
 
