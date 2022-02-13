@@ -4,7 +4,8 @@ class Account < ApplicationRecord
 
   validates :number, presence: true, uniqueness: true 
   validates :money, presence: true, length: {minimum:1}
-     def self.find_by_account_number(number) 
-        return where(number:number)
-     end
+
+  def self.find_by_account_number(account_number)
+    find_by_number(account_number)
+  end
 end

@@ -26,7 +26,7 @@ class AccountsController < ApplicationController
   #GET numero da conta para efectuar o saque
   # GET /accounts/:number/withdraw
   def withdraw
-    @account = Account.where(params[:number]).first
+    @account = Account.find_by_account_number(params[:number])
     account = @account
     account.money = 0.0;
     @account_withdraw = account
@@ -56,6 +56,11 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
+    @account_params = Account.find_by_account_number(@account.number)
+    
+
+    logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
+    #account_params[:money]
     respond_to do |format|
       if @account.update(account_params)
         format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
@@ -85,7 +90,9 @@ class AccountsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def account_params
-      params.require(:account).permit(:money, :status)
+      my_params = params.require(:account).permit(:money, :status)
+      my_params[:money] = 4444 
+      return my_params
     end
 
     def new_accout_number
