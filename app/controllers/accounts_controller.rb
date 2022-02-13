@@ -55,9 +55,9 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
-      
       if account_update_params[:money].to_f < 0
-        redirect_to "/accounts/"+@account.number.to_s+"/withdraw"
+        redirect_to "/accounts/"+@account.number.to_s+"/withdraw" 
+        flash[:notice]="Money should be less than or equal to $"
       else
       #logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
   
