@@ -30,7 +30,7 @@ class AccountsController < ApplicationController
     account.money = 0.0;
     @account_withdraw = account
 
-    logger.debug {"Last acount attributes hash: #{@account_withdraw.attributes.inspect}"}
+ # logger.debug {"Last acount attributes hash: #{@account_withdraw.attributes.inspect}"}
   end
 
 
@@ -55,18 +55,20 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
-    @account_params = Account.find_by_account_number(@account.number)
-    
-
-    logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
-    #account_params[:money]
-    respond_to do |format|
-      if @account.update(account_update_params)
-        format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
-        format.json { render :show, status: :ok, location: @account }
+      
+      if account_update_params[:money].to_f < 0
+        redirect_to "/accounts/"+@account.number.to_s+"/withdraw"
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+      #logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
+  
+      respond_to do |format|
+        if @account.update(account_update_params)
+          format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
+          format.json { render :show, status: :ok, location: @account }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @account.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -94,9 +96,15 @@ class AccountsController < ApplicationController
 
     def account_update_params
       my_params = params.require(:account).permit(:money, :status)
-      my_params[:money] = @account.money - my_params[:money].to_f
+
+      if my_params[:money].to_f < 0
+        return my_params
+      else
+       my_params[:money] = @account.money - my_params[:money].to_f
       return my_params
+      end
     end
+
 
     def new_accout_number
       @last_user_account = Account.last
