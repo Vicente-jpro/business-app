@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[ show edit update destroy account_update_params ]
+  before_action :set_account, only: %i[ show edit update destroy account_update_params  ]
   # GET /accounts or /accounts.json
   def index
     @accounts = Account.all
@@ -31,6 +31,11 @@ class AccountsController < ApplicationController
     @account_withdraw = account
 
  # logger.debug {"Last acount attributes hash: #{@account_withdraw.attributes.inspect}"}
+  end
+
+   # POST /accounts/:number/withdraw
+  def transference
+
   end
 
 
