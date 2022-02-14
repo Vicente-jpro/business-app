@@ -42,7 +42,9 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
-    
+    if account_params[:money].to_f < 0.0
+      redirect_to '/accounts/new' , notice: "Invalid money"
+    else
     @account = Account.new(account_params)
     @account.user_id = current_user.id
     @account.number = new_accout_number
@@ -56,6 +58,9 @@ class AccountsController < ApplicationController
         format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+
   end
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
@@ -114,9 +119,10 @@ class AccountsController < ApplicationController
     def new_accout_number
       @last_user_account = Account.last
 
-    logger.debug {"Last acount attributes hash: #{@last_user_account.attributes.inspect}"}
       if !@last_user_account.nil?
           @last_user_account.number = @last_user_account.number + 1
+      else
+        @last_user_account = Account.new(number:1000)
       end
 
       return @last_user_account.number
