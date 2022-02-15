@@ -1,6 +1,7 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy account_update_params  ]
   # GET /accounts or /accounts.json
+
   def index
     @accounts = Account.all
   end
@@ -12,6 +13,7 @@ class AccountsController < ApplicationController
   # GET /accounts/new
   def new
     @account = Account.new
+    button_name("New account")
   end
 
   # GET /accounts/1/edit
@@ -29,13 +31,16 @@ class AccountsController < ApplicationController
     account = @account
     account.money = 0.0;
     @account_withdraw = account
-
+    button_name("Take money")
  # logger.debug {"Last acount attributes hash: #{@account_withdraw.attributes.inspect}"}
   end
 
    # POST /accounts/:number/withdraw
   def transference
-
+    @account = Account.find_by_account_number(params[:number])
+    #logger.debug {"##############Last acount attributes hash: #{btn[:transfer]}########"}
+  
+    button_name("Transfere money")
   end
 
 
@@ -60,9 +65,12 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
-      if account_update_params[:money].to_f < 0
+      if account_params[:money].to_f > @account.money.to_f
+        redirect_to "/accounts/"+@account.number.to_s+"/withdraw"
+        flash[:notice]="Money should less than or equal to $ "+@account.money.to_s
+      elsif account_params[:money].to_f < 0
         redirect_to "/accounts/"+@account.number.to_s+"/withdraw" 
-        flash[:notice]="Money should be less than or equal to $"
+        flash[:notice]="Money should greater than or equal to $ "+0.to_s
       else
       #logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
   
@@ -87,6 +95,11 @@ class AccountsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+    def button_name(name) 
+      @button_name = name
+      return @button_name
+    end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -117,9 +130,15 @@ class AccountsController < ApplicationController
     logger.debug {"Last acount attributes hash: #{@last_user_account.attributes.inspect}"}
       if !@last_user_account.nil?
           @last_user_account.number = @last_user_account.number + 1
+      else
+        #Default account number
+        @last_user_account = Account.new(number:1000)
       end
-
       return @last_user_account.number
     end
+
+    
+      
+
   
 end

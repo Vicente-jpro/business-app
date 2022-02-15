@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_09_085238) do
+ActiveRecord::Schema[7.0].define(version: 2022_02_14_164346) do
   create_table "account_histories", force: :cascade do |t|
     t.integer "number_history"
     t.float "money_history"
@@ -22,9 +22,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_09_085238) do
   end
 
   create_table "accounts", force: :cascade do |t|
-    t.integer "number"
-    t.float "money"
-    t.string "status"
+    t.integer "number", default: 10000
+    t.float "money", default: 0.5
+    t.string "status", default: "activated"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
