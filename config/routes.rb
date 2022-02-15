@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get '/accounts/:id/user', to: 'accounts#user_accounts', as: 'user_accounts'
   get '/accounts/:number/withdraw', to: 'accounts#withdraw', as: 'withdraw'
   get '/accounts/:number/transference', to: 'accounts#transference', as: 'transference'
-  post '/accounts/:number/transference', to: 'accounts#transference_now'
+  post '/accounts/:number/transference_now', to: 'accounts#transference_now'
   
   resources :account_histories
   resources :accounts
