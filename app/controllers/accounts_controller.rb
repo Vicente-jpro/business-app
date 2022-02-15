@@ -13,41 +13,20 @@ class AccountsController < ApplicationController
     else
     #logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
 
-    respond_to do |format|
-      if @account.update(account_update_params)
-        format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
-        format.json { render :show, status: :ok, location: @account }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+      @account = Account.find_by_account_number(params[:number])
+
+      respond_to do |format|
+        if @account.update(account_update_params)
+          format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
+          format.json { render :show, status: :ok, location: @account }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @account.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
-  end
 
-
-  def index
-    @accounts = Account.all
-  end
-
-  # GET /accounts/1 or /accounts/1.json
-  def show
-  end
-
-  # GET /accounts/new
-  def new
-    @account = Account.new
-    button_name("New account")
-  end
-
-  # GET /accounts/1/edit
-  def edit
-  end
-   # GET /accounts/1/user
-  def user_accounts
-    @accounts = Account.where(user_id: current_user.id)
-  end
-  
   #GET numero da conta para efectuar o saque
   # GET /accounts/:number/withdraw
   def withdraw
@@ -63,10 +42,8 @@ class AccountsController < ApplicationController
   def transference
     @account = Account.find_by_account_number(params[:number])
     #logger.debug {"##############Last acount attributes hash: #{btn[:transfer]}########"}
-  
     button_name("Transfere money")
   end
-
 
 
   # POST /accounts or /accounts.json
@@ -113,6 +90,30 @@ class AccountsController < ApplicationController
         end
       end
     end
+  end
+
+
+
+  def index
+    @accounts = Account.all
+  end
+
+  # GET /accounts/1 or /accounts/1.json
+  def show
+  end
+
+  # GET /accounts/new
+  def new
+    @account = Account.new
+    button_name("New account")
+  end
+
+  # GET /accounts/1/edit
+  def edit
+  end
+   # GET /accounts/1/user
+  def user_accounts
+    @accounts = Account.where(user_id: current_user.id)
   end
 
   # DELETE /accounts/1 or /accounts/1.json
