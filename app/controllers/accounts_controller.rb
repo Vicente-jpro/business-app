@@ -1,6 +1,30 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy account_update_params  ]
   # GET /accounts or /accounts.json
+  
+  #POST '/accounts/:number/transference_now'
+  def transference_now
+    if account_params[:money].to_f > @account.money.to_f
+      redirect_to "/accounts/"+@account.number.to_s+"/withdraw"
+      flash[:notice]="Money should less than or equal to $ "+@account.money.to_s
+    elsif account_params[:money].to_f < 0
+      redirect_to "/accounts/"+@account.number.to_s+"/withdraw" 
+      flash[:notice]="Money should greater than or equal to $ "+0.to_s
+    else
+    #logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
+
+    respond_to do |format|
+      if @account.update(account_update_params)
+        format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
+        format.json { render :show, status: :ok, location: @account }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  end
+
 
   def index
     @accounts = Account.all
@@ -110,6 +134,10 @@ class AccountsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def account_params
       params.require(:account).permit(:money, :status)
+    end
+    
+    def account_transfere_now_params
+      params.require(:account).permit(:money, :number)
     end
 
     def account_update_params
