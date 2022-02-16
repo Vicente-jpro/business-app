@@ -1,4 +1,7 @@
 class Account < ApplicationRecord
+  
+  attr_accessor :destination_account
+
   belongs_to :user
   enum status: {blocked: "blocked", activated: "activated"}
   

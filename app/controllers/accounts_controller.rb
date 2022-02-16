@@ -1,22 +1,23 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[ show edit update destroy account_update_params  ]
+  before_action :set_account, only: %i[ show edit update destroy account_update_params ]
   # GET /accounts or /accounts.json
   
-  #POST '/accounts/:number/transference_now'
+  #POST '/accounts/transference_now'
   def transference_now
-    if account_params[:money].to_f > @account.money.to_f
+    @account = Account.find_by_account_number(params[:number])                     
+
+    if account_transfere_now_params[:money].to_f > @account.money.to_f
       redirect_to "/accounts/"+@account.number.to_s+"/withdraw"
       flash[:notice]="Money should less than or equal to $ "+@account.money.to_s
-    elsif account_params[:money].to_f < 0
+    elsif account_transfere_now_params[:money].to_f < 0
       redirect_to "/accounts/"+@account.number.to_s+"/withdraw" 
       flash[:notice]="Money should greater than or equal to $ "+0.to_s
     else
     #logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
 
-      @account = Account.find_by_account_number(params[:number])
 
       respond_to do |format|
-        if @account.update(account_update_params)
+        if @account.update(account_transfere_now_params)
           format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
           format.json { render :show, status: :ok, location: @account }
         else
@@ -71,14 +72,14 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
-      if account_params[:money].to_f > @account.money.to_f
+      if account_transfere_now_params[:money].to_f > @account.money.to_f
         redirect_to "/accounts/"+@account.number.to_s+"/withdraw"
         flash[:notice]="Money should less than or equal to $ "+@account.money.to_s
       elsif account_params[:money].to_f < 0
         redirect_to "/accounts/"+@account.number.to_s+"/withdraw" 
         flash[:notice]="Money should greater than or equal to $ "+0.to_s
       else
-      #logger.debug {"##############Last acount attributes hash: #{@account_params.attributes.inspect}########"}
+      logger.debug {"##############Last acount attributes hash: #{@account.attributes.inspect}########"}
   
       respond_to do |format|
         if @account.update(account_update_params)
@@ -143,7 +144,7 @@ class AccountsController < ApplicationController
     end
     
     def account_transfere_now_params
-      params.require(:account).permit(:money, :number)
+      params.require(:account).permit(:money, :number, :destination_account)
     end
 
     def account_update_params
