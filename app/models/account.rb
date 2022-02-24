@@ -2,7 +2,7 @@ class Account < ApplicationRecord
   attr_accessor :destination_account
 
   belongs_to :user
-  enum status: {blocked: "locked", activated: "activated"}
+  enum status: {locked: "locked", activated: "activated"}
   
   validates :number, presence: true, uniqueness: true 
   validates :money, presence: true, numericality: { greater_than: 1}
@@ -16,4 +16,5 @@ class Account < ApplicationRecord
     return account[:number]
   end
   
+
 end
