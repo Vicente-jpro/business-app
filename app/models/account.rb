@@ -1,5 +1,4 @@
 class Account < ApplicationRecord
-  
   attr_accessor :destination_account
 
   belongs_to :user
@@ -12,5 +11,10 @@ class Account < ApplicationRecord
     find_by_number(account_number)
   end
 
+
+  def destination_account=(account_number)
+    account = Account.find_by_number(account_number.to_i)
+    return account[:number]
+  end
   
 end

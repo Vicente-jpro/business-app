@@ -1,30 +1,41 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy account_update_params ]
+  before_action :set_account_to_transfere, only: [ :transference_now ]
   # GET /accounts or /accounts.json
   
   #POST '/accounts/transference_now'
   def transference_now
-    @account = Account.find_by_account_number(params[:number])                     
-   # @account_destination = Account.destination_account
-   debugger
-    if account_transfere_now_params[:money].to_f > @account.money.to_f
-      redirect_to "/accounts/"+@account.number.to_s+"/withdraw"
-      flash[:notice]="Money should less than or equal to $ "+@account.money.to_s
-    elsif account_transfere_now_params[:money].to_f < 0
-      redirect_to "/accounts/"+@account.number.to_s+"/withdraw" 
-      flash[:notice]="Money should greater than or equal to $ 0"
-    else
+    my_params = account_transfere_now_params
+    money_to_transfere = params[:money].to_f
+    
+      @account = Account.find_by_account_number(params[:destination_account])
+      
+      if money_to_transfere > 0 
+          #transfere the money
+          @account.money = @account.money + money_to_transfere
+          my_params[:money] = @account.money
+          my_params[:number] = params[:destination_account]
+          @account.update(my_params)
+       
+          #take money transfered from my account
+          my_params[:money] = money_to_transfere
+          my_params[:number] = params[:number]
+          @account = Account.find_by_account_number(params[:number])
+          @account.money = @account.money - money_to_transfere
+          my_params[:money] = @account.money
 
-      respond_to do |format|
-        if @account.update(account_transfere_now_params)
-          format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
-          format.json { render :show, status: :ok, location: @account }
-        else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @account.errors, status: :unprocessable_entity }
-        end
+          respond_to do |format|
+            if @account.update(my_params)
+              format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
+              format.json { render :show, status: :ok, location: @account }
+            else
+              format.html { render :edit, status: :unprocessable_entity }
+              format.json { render json: @account.errors, status: :unprocessable_entity }
+            end
+          end
+          
       end
-    end
+     
   end
 
   #GET numero da conta para efectuar o saque
@@ -129,6 +140,10 @@ class AccountsController < ApplicationController
     end
 
   private
+    def set_account_to_transfere
+      @account = Account.find_by_account_number(params[:destination_account].to_i)
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_account
       @account = Account.find(params[:id])
@@ -140,7 +155,7 @@ class AccountsController < ApplicationController
     end
     
     def account_transfere_now_params
-      params.require(:account).permit(:money, :number, :destination_account_number)
+     params.permit(:money, :number, :destination_account)
     end
 
     def account_update_params
