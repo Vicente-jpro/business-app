@@ -3,7 +3,7 @@ class AccountsController < ApplicationController
   before_action :set_account_to_transfere, only: [ :transference_now ]
   # GET /accounts or /accounts.json
   
-  #POST '/accounts/transference_now'
+  #POST '/accounts/:number/transference_now'
   def transference_now
     my_params = account_transfere_now_params
     money_to_transfere = params[:money].to_f
@@ -13,6 +13,7 @@ class AccountsController < ApplicationController
       if @account.nil?
         redirect_to "/accounts/"+params[:number]+"/transference"
         flash[:notice]="Invalid destination account."
+      elsif @account
       elsif money_to_transfere < 0
           redirect_to "/accounts/"+params[:number]+"/transference"
           flash[:notice]="Money should greater than or equal to $ "+0.to_s  
@@ -69,7 +70,7 @@ class AccountsController < ApplicationController
       status: "locked",
       user_id: @account.user_id,
       }
-      if @account.status == "locked" or @account.status == "blocked"
+      if account_loked?
         account[:status] = "activated"
       end
  
@@ -78,7 +79,10 @@ class AccountsController < ApplicationController
       redirect_to @account
     end
   end
-
+  
+  def account_loked?
+    @account.status == "locked" or @account.status == "blocked"
+  end 
    # POST /accounts/:number/withdraw
   def transference
     @account = Account.find_by_account_number(params[:number])
