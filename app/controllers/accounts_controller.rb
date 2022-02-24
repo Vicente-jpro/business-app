@@ -9,8 +9,14 @@ class AccountsController < ApplicationController
     money_to_transfere = params[:money].to_f
     
       @account = Account.find_by_account_number(params[:destination_account])
-      
-      if money_to_transfere > 0 
+
+      if @account.nil?
+        redirect_to "/accounts/"+params[:number]+"/transference"
+        flash[:notice]="Invalid destination account."
+      elsif money_to_transfere < 0
+          redirect_to "/accounts/"+params[:number]+"/transference"
+          flash[:notice]="Money should greater than or equal to $ "+0.to_s  
+      else 
           #transfere the money
           @account.money = @account.money + money_to_transfere
           my_params[:money] = @account.money
@@ -23,7 +29,7 @@ class AccountsController < ApplicationController
           @account = Account.find_by_account_number(params[:number])
           @account.money = @account.money - money_to_transfere
           my_params[:money] = @account.money
-
+    
           respond_to do |format|
             if @account.update(my_params)
               format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
@@ -33,7 +39,8 @@ class AccountsController < ApplicationController
               format.json { render json: @account.errors, status: :unprocessable_entity }
             end
           end
-          
+
+            
       end
      
   end
@@ -46,6 +53,30 @@ class AccountsController < ApplicationController
     account.money = 0.0;
     @account_withdraw = account
     button_name("Take money")
+  end
+
+  # GET /accounts/:number/change_account_status
+  def change_account_status
+
+    @account = Account.find_by_account_number(params[:number])
+    if @account.nil?
+      redirect_to "/new"
+    else
+      account = { 
+      id: @account.id,
+      number: @account.number,
+      money: @account.money,
+      status: "locked",
+      user_id: @account.user_id,
+      }
+      if @account.status == "locked" or @account.status == "blocked"
+        account[:status] = "activated"
+      end
+ 
+      @account.update(account)
+
+      redirect_to @account
+    end
   end
 
    # POST /accounts/:number/withdraw

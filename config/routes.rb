@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get '/accounts/:number/withdraw', to: 'accounts#withdraw', as: 'withdraw'
   get '/accounts/:number/transference', to: 'accounts#transference', as: 'transference'
   post '/accounts/:number/transference_now', to: 'accounts#transference_now'
+  get '/accounts/:number/change_account_status', to: 'accounts#change_account_status', as: 'change_account_status'
   
   resources :account_histories
   resources :accounts
@@ -15,6 +16,8 @@ Rails.application.routes.draw do
   devise_scope :user do
     get '/users/sign_out', to: 'devise/sessions#destroy'
   end
+
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
