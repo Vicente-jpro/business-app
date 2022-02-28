@@ -14,4 +14,6 @@ class Account < ApplicationRecord
   def self.find_user_accounts(user_id)
     where(user_id: user_id)
   end
+
+ 
 end

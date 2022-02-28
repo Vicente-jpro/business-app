@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy account_update_params ]
-  before_action :set_account_to_transfere, only: [ :transference_now ]
+  before_action :set_origin_account, only: [ :withdraw, :change_account_status, :transference ]
   # GET /accounts or /accounts.json
   
   #POST '/accounts/:number/transference_now'
@@ -48,7 +48,6 @@ class AccountsController < ApplicationController
   #GET numero da conta para efectuar o saque
   # GET /accounts/:number/withdraw
   def withdraw
-    @account = Account.find_by_account_number(params[:number])
     account = @account
     account.money = 0.0;
     @account_withdraw = account
@@ -58,7 +57,6 @@ class AccountsController < ApplicationController
   # GET /accounts/:number/change_account_status
   def change_account_status
 
-    @account = Account.find_by_account_number(params[:number])
     if @account.nil?
       redirect_to "/new"
     else
@@ -82,9 +80,8 @@ class AccountsController < ApplicationController
   def account_loked?
     @account.status == "locked" or @account.status == "blocked"
   end 
-   # POST /accounts/:number/withdraw
+   # GET /accounts/:number/transference
   def transference
-    @account = Account.find_by_account_number(params[:number])
     button_name("Transfere money")
   end
 
@@ -174,8 +171,8 @@ class AccountsController < ApplicationController
     end
 
   private
-    def set_account_to_transfere
-      @account = Account.find_by_account_number(params[:destination_account].to_i)
+    def set_origin_account
+      @account = Account.find_by_account_number(params[:number].to_i)
     end
 
     # Use callbacks to share common setup or constraints between actions.
