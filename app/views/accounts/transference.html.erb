@@ -1,6 +1,6 @@
  <div class="text-center">   
     <h2>Transfer money to another account</h1>
-    <h3>Your money avalible: <%= number_to_currency(@account.money) %> </h2>
+    <h3>Your money avalible: <%= number_to_currency(@account.money) %> </h3>
 </div>
 <div class= "container col-sm-6" >
 <%= form_with url: "/accounts/"+@account.number.to_s+"/transference_now", method: :post do |form| %>
