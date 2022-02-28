@@ -10,11 +10,14 @@ class AccountsController < ApplicationController
     
       @account = Account.find_by_account_number(params[:destination_account])
 
-      if @account.nil?
-        redirect_to "/accounts/"+params[:number]+"/transference"
-        flash[:notice]="Invalid destination account."
+      if account_loked?
+        redirect_to transference_page
+        invalid_account_message
+      elsif @account.nil?
+        redirect_to transference_page
+        invalid_account_message
       elsif money_to_transfere < 0
-          redirect_to "/accounts/"+params[:number]+"/transference"
+          redirect_to transference_page
           flash[:notice]="Money should greater than or equal to $ 0"
       else 
           #transfere the money
@@ -170,7 +173,17 @@ class AccountsController < ApplicationController
       return @button_name
     end
 
+
   private
+
+    def transference_page
+       "/accounts/"+params[:number]+"/transference"
+    end
+
+    def invalid_account_message
+      flash[:notice]="Invalid destination account."
+    end
+
     def set_origin_account
       @account = Account.find_by_account_number(params[:number].to_i)
     end
