@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_14_164346) do
+ActiveRecord::Schema[7.0].define(version: 2022_02_09_085238) do
   create_table "account_histories", force: :cascade do |t|
     t.integer "number_history"
     t.float "money_history"
