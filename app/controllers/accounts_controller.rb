@@ -13,7 +13,6 @@ class AccountsController < ApplicationController
       if @account.nil?
         redirect_to "/accounts/"+params[:number]+"/transference"
         flash[:notice]="Invalid destination account."
-      elsif @account
       elsif money_to_transfere < 0
           redirect_to "/accounts/"+params[:number]+"/transference"
           flash[:notice]="Money should greater than or equal to $ "+0.to_s  
