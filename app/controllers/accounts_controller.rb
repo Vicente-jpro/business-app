@@ -15,7 +15,7 @@ class AccountsController < ApplicationController
         flash[:notice]="Invalid destination account."
       elsif money_to_transfere < 0
           redirect_to "/accounts/"+params[:number]+"/transference"
-          flash[:notice]="Money should greater than or equal to $ "+0.to_s  
+          flash[:notice]="Money should greater than or equal to $ 0"
       else 
           #transfere the money
           @account.money = @account.money + money_to_transfere
@@ -119,7 +119,7 @@ class AccountsController < ApplicationController
         flash[:notice]="Money should less than or equal to $ "+@account.money.to_s
       elsif account_update_params[:money].to_f < 0
         redirect_to "/accounts/"+@account.number.to_s+"/withdraw" 
-        flash[:notice]="Money should greater than or equal to $ "+0.to_s
+        flash[:notice]="Money should greater than or equal to $ 0"
       else
       
       respond_to do |format|
@@ -155,7 +155,7 @@ class AccountsController < ApplicationController
   end
    # GET /accounts/1/user
   def user_accounts
-    @accounts = Account.where(user_id: current_user.id)
+    @accounts = Account.find_user_accounts(current_user.id)
   end
 
   # DELETE /accounts/1 or /accounts/1.json

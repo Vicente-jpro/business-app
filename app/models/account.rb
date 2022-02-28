@@ -11,10 +11,7 @@ class Account < ApplicationRecord
     find_by_number(account_number)
   end
 
-  def destination_account=(account_number)
-    account = Account.find_by_number(account_number.to_i)
-    return account[:number]
+  def self.find_user_accounts(user_id)
+    where(user_id: user_id)
   end
-  
-
 end
