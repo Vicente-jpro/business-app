@@ -1,15 +1,19 @@
-<h1>Transfer money to another account</h1>
-<h2>Your money avalible: <%= number_to_currency(@account.money) %> </h2>
+    <h2 class="text-center">Transfer money to another account</h1>
+    <h3 class="text-center">Your money avalible: <%= number_to_currency(@account.money) %> </h2>
 
+<div class= "container col-sm-6" >
 <%= form_with url: "/accounts/"+@account.number.to_s+"/transference_now", method: :post do |form| %>
-    <%= form.label :money, "Money" %> <br>
-    <%= form.text_field :money %> <br>
+   <div class="form-group "> 
+        <%= form.label :money, "Money" %>
+        <%= form.text_field :money, class: "form-control" %>
 
-    <!-- Origin send  from -->
-    <%= form.hidden_field :number, value: @account.number%> <br>
+        <!-- Origin send  from -->
+        <%= form.hidden_field :number, value: @account.number%> 
 
-    <!--Destination send to-->
-    <%= form.label :destination_account, "Send to (account number)" %> <br>
-    <%= form.number_field :destination_account%> <br>
-    <%= form.submit @button_name %>
+        <!--Destination send to-->
+        <%= form.label :destination_account, "Send to (account number)" %> 
+        <%= form.number_field :destination_account, class: "form-control"%>
+        <%= form.submit @button_name, class: "btn btn-info form-controls my-2 col-sm-12" %>
+    </div>
 <% end %>
+</div>
