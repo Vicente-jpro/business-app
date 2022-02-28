@@ -9,16 +9,17 @@ class AccountsController < ApplicationController
     money_to_transfere = params[:money].to_f
     
       @account = Account.find_by_account_number(params[:destination_account])
-
+      @origin_account = Account.find_by_account_number(params[:number])
       if account_loked?
         redirect_to transference_page
         invalid_account_message
       elsif @account.nil?
         redirect_to transference_page
         invalid_account_message
-      elsif money_to_transfere < 0
+      elsif money_to_transfere < 0 or @origin_account.money <= money_to_transfere
           redirect_to transference_page
-          flash[:notice]="Money should greater than or equal to $ 0"
+          flash[:notice]="Invalid money."
+          debugger
       else 
           #transfere the money
           @account.money = @account.money + money_to_transfere
@@ -29,7 +30,9 @@ class AccountsController < ApplicationController
           #take money transfered from my account
           my_params[:money] = money_to_transfere
           my_params[:number] = params[:number]
-          @account = Account.find_by_account_number(params[:number])
+
+          @account = @origin_account
+          debugger
           @account.money = @account.money - money_to_transfere
           my_params[:money] = @account.money
     
