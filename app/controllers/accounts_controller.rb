@@ -19,10 +19,9 @@ class AccountsController < ApplicationController
       elsif money_to_transfere < 0 or @origin_account.money <= money_to_transfere
           redirect_to transference_page
           flash[:notice]="Invalid money."
-          debugger
       else 
           #transfere the money
-          @account.money = @account.money + money_to_transfere
+          @account.money += money_to_transfere
           my_params[:money] = @account.money
           my_params[:number] = params[:destination_account]
           @account.update(my_params)
@@ -32,8 +31,7 @@ class AccountsController < ApplicationController
           my_params[:number] = params[:number]
 
           @account = @origin_account
-          debugger
-          @account.money = @account.money - money_to_transfere
+          @account.money -= money_to_transfere
           my_params[:money] = @account.money
     
           respond_to do |format|
@@ -46,7 +44,6 @@ class AccountsController < ApplicationController
             end
           end
 
-            
       end
      
   end
