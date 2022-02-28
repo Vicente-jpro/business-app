@@ -1,6 +1,7 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy account_update_params ]
   before_action :set_origin_account, only: [ :withdraw, :change_account_status, :transference ]
+  before_action :
   # GET /accounts or /accounts.json
   
   #POST '/accounts/:number/transference_now'
