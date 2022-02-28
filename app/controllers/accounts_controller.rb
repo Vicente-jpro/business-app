@@ -82,7 +82,11 @@ class AccountsController < ApplicationController
   end
   
   def account_loked?
-    @account.status == "locked" or @account.status == "blocked"
+    if @account.nil?
+      false
+    else
+       @account.status == "locked" or @account.status == "blocked"
+    end
   end 
    # GET /accounts/:number/transference
   def transference
