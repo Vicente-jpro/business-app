@@ -10,17 +10,18 @@
       </ul>
     </div>
   <% end %>
-
-  <div>
+<div class="container col-sm-6">
+  <div class="form-group">
     <%= form.label :money, style: "display: block" %>
-    <%= form.text_field :money %>
+    <%= form.text_field :money, class:"form-control" %>
   </div>
 
-  <div>
-    <%= form.hidden_field :status, value: "activated" %>
+  <div class="form-group">
+    <%= form.hidden_field :status, value: "activated", class:"form-controle" %>
   </div>
+  <div>
+    <%= form.submit @button_name, class: "btn btn-info form-controls my-2 col-sm-12" %>
+  </div>
+</div>
 
-  <div>
-    <%= form.submit @button_name %>
-  </div>
 <% end %>

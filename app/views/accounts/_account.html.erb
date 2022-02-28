@@ -1,23 +1,24 @@
-<div id="<%= dom_id account %>">
-  <p>
-    <strong>Number:</strong>
-    <%= account.number %>
-  </p>
+<div class="card text-center" id="<%= dom_id account %>">
+  <div class="card-header"> 
+    <%= account.user.username %> 
+  </div>
+  <div class="card-body">
+    <p>
+      <strong>Number:</strong>
+      <%= account.number %>
+    </p>
 
-  <p>
-    <strong>Money:</strong>
-    <%= number_to_currency(account.money) %>
-  </p>
+    <p>
+      <strong>Money:</strong>
+      <%= number_to_currency(account.money) %>
+    </p>
 
-  <p>
-    <strong>Status:</strong>
-    <%= account.status %>
-  </p>
-
-  <p>
-    <strong>User:</strong>
-    <%= account.user.username %>
-  </p>
+    <p>
+      <strong>Status:</strong>
+      <%= account.status %>
+    </p>
+  
+ 
  
     <% if account.status == "locked" or account.status == "blocked"  %> 
         <%= link_to "Activate account", change_account_status_path(account.number), class: "btn btn-success" %>
@@ -28,5 +29,7 @@
     <%end%>
  
   <hr>
+
+  </div>
 
 </div>
