@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy account_update_params ]
-  before_action :set_origin_account, only: [ :withdraw, :change_account_status, :transference ]
+  before_action :set_origin_account, only: [ :withdraw, :change_account_status, :transference, :do_not_have_enough_money_to_transfer? ]
   before_action :authenticate_user!
   # GET /accounts or /accounts.json
   
@@ -14,6 +14,9 @@ class AccountsController < ApplicationController
       if account_loked?
         redirect_to transference_page
         invalid_account_message
+      elsif do_not_have_enough_money_to_transfer? 
+        redirect_to transference_page
+        flash[:notice]="Invalid money."
       elsif @account.nil?
         redirect_to transference_page
         invalid_account_message
@@ -225,6 +228,19 @@ class AccountsController < ApplicationController
     
     def transfer_rate_of_ten_reais
       10
+    end
+    
+    def do_not_have_enough_money_to_transfer? 
+      money_to_transfere = params[:money].to_f
+      @account.money -= money_to_transfere
+      params[:money] = @account.money - transfer_rate
+      money = params[:money].to_f
+      
+      if money < 0
+        return true 
+      else 
+        return false
+      end
     end
     
     def transference_page
