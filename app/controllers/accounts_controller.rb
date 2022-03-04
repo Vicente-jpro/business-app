@@ -33,8 +33,8 @@ class AccountsController < ApplicationController
 
           @account = @origin_account
           @account.money -= money_to_transfere
-          my_params[:money] = @account.money
-    
+          my_params[:money] = @account.money - transfer_rate
+          debugger
           respond_to do |format|
             if @account.update(my_params)
               format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
@@ -180,7 +180,53 @@ class AccountsController < ApplicationController
 
 
   private
+    def transfer_rate
+        if money_up_to_one_thousand?
+          return transfer_rate_of_ten_reais
+        elsif is_saturday_or_sunday?
+          return transfer_rate_of_seven_reais
+          elsif hours_between_nine_and_eighteen?
+            return transfer_rate_of_five_reais
+        else
+          return transfer_rate_of_seven_reais
+        end
+    end
 
+    def money_up_to_one_thousand?
+      ( params[:money].to_f > 1000 )
+    end
+
+    def is_saturday_or_sunday?
+      ( (day_of_the_week == "Saturday") || (day_of_the_week == "Sunday") )
+    end
+
+    def hours_between_nine_and_eighteen?
+        ( (hours >= 9) && (hours <= 18) )
+    end
+
+    def day_of_the_week 
+      Date.today.strftime('%A')
+    end
+
+    def hours      
+      time = Time.new.to_s
+      time_array = time.split
+      hours = time_array[1].split(":").first
+      return hours.to_i 
+    end
+    
+    def transfer_rate_of_seven_reais
+      7
+    end
+    
+    def transfer_rate_of_five_reais
+      5
+    end
+    
+    def transfer_rate_of_ten_reais
+      10
+    end
+    
     def transference_page
        "/accounts/"+params[:number]+"/transference"
     end
