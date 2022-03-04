@@ -34,7 +34,7 @@ class AccountsController < ApplicationController
           @account = @origin_account
           @account.money -= money_to_transfere
           my_params[:money] = @account.money - transfer_rate
-          debugger
+          
           respond_to do |format|
             if @account.update(my_params)
               format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
