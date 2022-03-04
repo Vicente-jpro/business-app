@@ -37,7 +37,7 @@ class AccountsController < ApplicationController
           
           respond_to do |format|
             if @account.update(my_params)
-              format.html { redirect_to account_url(@account), notice: "Money was transferred successfully." }
+              format.html { redirect_to account_url(@account), notice: "Money was transfered successfully." }
               format.json { render :show, status: :ok, location: @account }
             else
               format.html { render :edit, status: :unprocessable_entity }
