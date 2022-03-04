@@ -129,7 +129,7 @@ class AccountsController < ApplicationController
       
       respond_to do |format|
         if @account.update(account_update_params)
-          format.html { redirect_to account_url(@account), notice: "Congratulation you take your money successfully." }
+          format.html { redirect_to account_url(@account), notice: "Congratulation you taked your money successfully." }
           format.json { render :show, status: :ok, location: @account }
         else
           format.html { render :edit, status: :unprocessable_entity }
