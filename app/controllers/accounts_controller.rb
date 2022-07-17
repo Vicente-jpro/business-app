@@ -30,6 +30,7 @@ class AccountsController < ApplicationController
     account.money = 0.0;
     @account_withdraw = account
     button_name("Take money")
+    debugger
   end
 
   # GET /accounts/:number/change_account_status
@@ -132,9 +133,10 @@ class AccountsController < ApplicationController
   # GET /accounts/1/edit
   def edit
   end
-   # GET /accounts/1/user
-  def user_accounts
+   # GET /accounts/1/user show all accounts
+  def user
     @accounts = Account.find_user_accounts(current_user.id)
+    render "accounts/user_accounts", account: @accounts
   end
 
   # DELETE /accounts/1 or /accounts/1.json
@@ -162,7 +164,7 @@ class AccountsController < ApplicationController
     end
 
     def set_origin_account
-      @account = Account.find_by_account_number(params[:number].to_i)
+      @account = Account.find_by_account_number(params[:id].to_i)
     end
 
     # Use callbacks to share common setup or constraints between actions.
