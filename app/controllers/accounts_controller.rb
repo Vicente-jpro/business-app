@@ -10,7 +10,7 @@ class AccountsController < ApplicationController
   def transference_now
 
     my_params = transfer(account_transfere_now_params)
-    transfer_rate(my_params)
+   #transfer_rate(my_params)
 
     respond_to do |format|
       if @account.update(my_params)
