@@ -25,7 +25,7 @@
      <%else%>
      <%= account.id %>
       <%= link_to "Take money", withdraw_account_path(account.id), class: "btn btn-info"%>
-      <%= link_to "Transfer money", transference_path(account.number), class: "btn btn-info"%>
+      <%= link_to "Transfer money", transference_account_path(account.id), class: "btn btn-info"%>
       <%= link_to "lock account", change_account_status_path(account.number), class: "btn btn-danger" %> 
     <%end%>
  
