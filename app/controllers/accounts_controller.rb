@@ -10,7 +10,7 @@ class AccountsController < ApplicationController
   def transference_now
 
     my_params = transfer(account_transfere_now_params)
-    transfer_rate(my_params)
+   #transfer_rate(my_params)
 
     respond_to do |format|
       if @account.update(my_params)
@@ -132,9 +132,10 @@ class AccountsController < ApplicationController
   # GET /accounts/1/edit
   def edit
   end
-   # GET /accounts/1/user
-  def user_accounts
+   # GET /accounts/1/user show all accounts
+  def user
     @accounts = Account.find_user_accounts(current_user.id)
+    render "accounts/user_accounts", account: @accounts
   end
 
   # DELETE /accounts/1 or /accounts/1.json
@@ -162,7 +163,7 @@ class AccountsController < ApplicationController
     end
 
     def set_origin_account
-      @account = Account.find_by_account_number(params[:number].to_i)
+      @account = Account.find(params[:id])
     end
 
     # Use callbacks to share common setup or constraints between actions.

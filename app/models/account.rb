@@ -10,7 +10,6 @@ class Account < ApplicationRecord
   def self.find_by_account_number(account_number)
     find_by_number(account_number)
   end
-
   def self.find_user_accounts(user_id)
     where(user_id: user_id)
   end

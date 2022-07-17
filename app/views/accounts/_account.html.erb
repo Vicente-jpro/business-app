@@ -23,7 +23,8 @@
     <% if account.status == "locked" or account.status == "blocked"  %> 
         <%= link_to "Activate account", change_account_status_path(account.number), class: "btn btn-success" %>
      <%else%>
-      <%= link_to "Take money", withdraw_path(account.number), class: "btn btn-info"%>
+     <%= account.id %>
+      <%= link_to "Take money", withdraw_account_path(account.id), class: "btn btn-info"%>
       <%= link_to "Transfer money", transference_path(account.number), class: "btn btn-info"%>
       <%= link_to "lock account", change_account_status_path(account.number), class: "btn btn-danger" %> 
     <%end%>
