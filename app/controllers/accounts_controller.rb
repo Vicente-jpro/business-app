@@ -3,53 +3,22 @@ class AccountsController < ApplicationController
   before_action :set_origin_account, only: [ :withdraw, :change_account_status, :transference, :do_not_have_enough_money_to_transfer? ]
   before_action :authenticate_user!
   # GET /accounts or /accounts.json
-  
+  include TransferConcern
+
   #POST '/accounts/:number/transference_now'
   def transference_now
-    my_params = account_transfere_now_params
-    money_to_transfere = params[:money].to_f
-    
-      @account = Account.find_by_account_number(params[:destination_account])
-      @origin_account = Account.find_by_account_number(params[:number])
-      if account_loked?
-        redirect_to transference_page
-        invalid_account_message
-      elsif do_not_have_enough_money_to_transfer? 
-        redirect_to transference_page
-        flash[:notice]="Invalid money."
-      elsif @account.nil?
-        redirect_to transference_page
-        invalid_account_message
-      elsif money_to_transfere < 0 or @origin_account.money <= money_to_transfere
-          redirect_to transference_page
-          flash[:notice]="Invalid money."
-      else 
-          #transfere the money
-          @account.money += money_to_transfere
-          my_params[:money] = @account.money
-          my_params[:number] = params[:destination_account]
-          @account.update(my_params)
-       
-          #take money transfered from my account
-          my_params[:money] = money_to_transfere
-          my_params[:number] = params[:number]
 
-          @account = @origin_account
-          @account.money -= money_to_transfere
-          my_params[:money] = @account.money - transfer_rate
-          
-          respond_to do |format|
-            if @account.update(my_params)
-              format.html { redirect_to account_url(@account), notice: "Money was transfered successfully." }
-              format.json { render :show, status: :ok, location: @account }
-            else
-              format.html { render :edit, status: :unprocessable_entity }
-              format.json { render json: @account.errors, status: :unprocessable_entity }
-            end
-          end
+    my_params = transfer(account_transfere_now_params)
 
+    respond_to do |format|
+      if @account.update(my_params)
+        format.html { redirect_to account_url(@account), notice: "Money was transfered successfully." }
+        format.json { render :show, status: :ok, location: @account }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
       end
-     
+    end
   end
 
   #GET numero da conta para efectuar o saque

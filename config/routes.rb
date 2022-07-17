@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'bank_statement/index'
 
   root 'home#index'
   get 'withdraw/account'
