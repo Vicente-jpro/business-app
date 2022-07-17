@@ -10,17 +10,18 @@ class AccountsController < ApplicationController
   def transference_now
 
     my_params = transfer(account_transfere_now_params)
-   #transfer_rate(my_params)
-
-    respond_to do |format|
-      if @account.update(my_params)
-        format.html { redirect_to account_url(@account), notice: "Money was transfered successfully." }
-        format.json { render :show, status: :ok, location: @account }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+      
+      if my_params != "Invalid money."
+        respond_to do |format|
+          if @account.update!(my_params)
+            format.html { redirect_to account_url(@account), notice: "Money was transfered successfully." }
+            format.json { render :show, status: :ok, location: @account }
+          else
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @account.errors, status: :unprocessable_entity }
+          end
+        end
       end
-    end
   end
 
   #GET numero da conta para efectuar o saque
@@ -94,11 +95,11 @@ class AccountsController < ApplicationController
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
       if account_update_params[:money].to_f > @account.money.to_f
-        redirect_to "/accounts/"+@account.number.to_s+"/withdraw"
-        flash[:notice]="Money should less than or equal to $ "+@account.money.to_s
+        redirect_to withdraw_account_path(@account.id) #"/accounts/"+@account.number.to_s+"/withdraw"
+        flash[:alert]="Money should less than or equal to $ "+@account.money.to_s
       elsif account_update_params[:money].to_f < 0
-        redirect_to "/accounts/"+@account.number.to_s+"/withdraw" 
-        flash[:notice]="Money should greater than or equal to $ 0"
+        redirect_to withdraw_account_path(@account.id) #"/accounts/"+@account.number.to_s+"/withdraw"
+        flash[:alert]="Money should greater than or equal to $ 0"
       else
       
       respond_to do |format|
@@ -154,9 +155,9 @@ class AccountsController < ApplicationController
     end
     
     
-    def transference_page
-       "/accounts/"+params[:number]+"/transference"
-    end
+    # def transference_page
+    #    "/accounts/"+params[:number]+"/transference"
+    # end
 
     def invalid_account_message
       flash[:notice]="Invalid destination account."

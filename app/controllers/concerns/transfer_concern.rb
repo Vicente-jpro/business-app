@@ -16,13 +16,13 @@ module TransferConcern
         invalid_account_message
       elsif do_not_have_enough_money_to_transfer?(origem_params)
         redirect_to transference_page(origem_params)
-        flash[:notice]="Invalid money."
+        flash[:alert]="Invalid money."
       elsif @account.nil?
         redirect_to transference_page(origem_params)
         invalid_account_message
       elsif money_to_transfere < 0 or @origin_account.money <= money_to_transfere
           redirect_to transference_page(origem_params)
-          flash[:notice]="Invalid money."
+          flash[:alert]="Invalid money."
       else 
           #transfere put the money to destination account
           new_money = @account.money + money_to_transfere
@@ -38,9 +38,10 @@ module TransferConcern
           new_money = @origin_account.money - money_to_transfere
  
           origem_params[:money] = new_money - transfer_rate(origem_params)
+           return origem_params
           
-          return origem_params
       end
+     
 	 end
    
 end
