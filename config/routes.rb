@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   get 'bank_statement/index'
 
   root 'home#index'
-  get 'withdraw/account'
   
   #devise_for :users, path: '', path_names: {sign_in: 'login', sign_out: 'logout', sign_up: 'register'} 
   #get '/accounts/:id/user', to: 'accounts#user_accounts', as: 'user_accounts'

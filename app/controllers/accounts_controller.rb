@@ -30,7 +30,6 @@ class AccountsController < ApplicationController
     account.money = 0.0;
     @account_withdraw = account
     button_name("Take money")
-    debugger
   end
 
   # GET /accounts/:number/change_account_status
@@ -164,7 +163,7 @@ class AccountsController < ApplicationController
     end
 
     def set_origin_account
-      @account = Account.find_by_account_number(params[:id].to_i)
+      @account = Account.find(params[:id])
     end
 
     # Use callbacks to share common setup or constraints between actions.
