@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root 'home#index'
 
   #post '/accounts/:number/transference_now', to: 'accounts#transference_now'
-  get '/accounts/:number/change_account_status', to: 'accounts#change_account_status', as: 'change_account_status'
+  #get '/accounts/:number/change_account_status', to: 'accounts#change_account_status', as: 'change_account_status'
   
   resources :accounts do
     member do
@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get 'withdraw'
       get 'transference'
       post 'transference_now'
+      get 'change_account_status'
 
     end
   end
