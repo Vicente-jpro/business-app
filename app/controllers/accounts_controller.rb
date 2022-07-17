@@ -5,7 +5,7 @@ class AccountsController < ApplicationController
   # GET /accounts or /accounts.json
   
   include TransferConcern
-
+  include TransferRateConcern
   #POST '/accounts/:number/transference_now'
   def transference_now
 
