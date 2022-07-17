@@ -3,9 +3,6 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  #post '/accounts/:number/transference_now', to: 'accounts#transference_now'
-  #get '/accounts/:number/change_account_status', to: 'accounts#change_account_status', as: 'change_account_status'
-  
   resources :accounts do
     member do
       get 'user'
@@ -13,7 +10,6 @@ Rails.application.routes.draw do
       get 'transference'
       post 'transference_now'
       get 'change_account_status'
-
     end
   end
   
@@ -22,9 +18,4 @@ Rails.application.routes.draw do
     get '/users/sign_out', to: 'devise/sessions#destroy'
   end
 
-
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
 end
