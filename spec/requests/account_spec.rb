@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "Accounts", type: :request do
+  include Devise::Test::IntegrationHelpers
+  
   describe "POST /transference_now" do
     let(:account) {create(:account)}
 
