@@ -1,2 +1,0 @@
-class AccountHistoriesController < ApplicationController
-end
